@@ -9,7 +9,83 @@
 <body>
     <h1>Asynchronous JavaScript</h1>
     <script>
+        // const first = () => {
+        //     setTimeout(() => {
+        //         console.log("first!");
+        //     }, 2000);
+        // }
+
+        // const second = () => {
+        //     console.log("second!");
+        // }
+        // first();
+        // second();
+        // console.log("end");
         
+        // function getRecipe() {
+        //     setTimeout(() => {
+        //         const recipeId = [1, 2, 3, 4];
+        //         console.log(recipeId);
+
+        //         setTimeout((id) => {
+        //             const recipe = {title: 'title!', publisher: 'publisher!'};
+        //             console.log(recipe.title);
+
+        //             setTimeout(publisher => {
+        //                 console.log(publisher);
+        //             }, 6000);
+        //         }, 4000);
+        //     }, 2000);
+            
+        // }
+
+        // getRecipe();
+
+        const getIDs = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                const id_obj = {id: 2};
+                resolve(JSON.stringify(id_obj));
+            }, 3000);
+        });
+        
+        const getTitle = id => {
+            return new Promise((resolve, reject) => {
+                setTimeout((id) => {
+                    const recipe = {id: 2, title: 'title1'};
+                    resolve(JSON.stringify(recipe));
+                }, 1500, id);
+            });
+        }
+            
+        
+        const getAuthor = title => {
+            return new Promise((resolve, reject) => {
+                setTimeout((title) => {
+                    const recipe = {title: 'title1', author: 'hpd'};
+                    resolve(JSON.stringify(recipe));
+                }, 1500, title);
+            });
+        }
+        
+
+        getIDs
+        .then(recipe => {
+            const id = JSON.parse(recipe).id;
+            console.log('creating getTitle promise!');
+            return getTitle(id);
+        })
+        .then(recipe => {
+            const title = JSON.parse(recipe).title;
+            console.log('creating getAuthor promise!');
+            return getAuthor(title);
+        })
+        .then(recipe => {
+            const author = JSON.parse(recipe).author;
+            console.log(author);
+        })
+        .catch(error => {
+            console.log(error);
+        });
     </script>
 </body>
 </html>
